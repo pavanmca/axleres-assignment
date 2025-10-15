@@ -7,24 +7,28 @@ This project analyzes cytotoxicity screening data from the **In VitroDB v4.3 dat
 ## Dataset
 
 - **Source**: In VitroDB v4.3 (AUG 2024)
-- **Size**: ~10,000+ chemical compounds
+- **Size**: 10,487 chemical compounds
 - **Format**: Excel (.xlsx)
 - **Key Metrics**:
   - `cytotox_median_um`: Median cytotoxicity concentration in micromolar (µM) - **lower values indicate MORE toxicity**
   - `nhit`: Number of positive hits (measurable toxic effects)
   - `ntested`: Number of assays conducted
   - Various bounds and log-transformed values
+- **Data Quality**: 100% complete in key columns (chnm, cytotox_median_um, nhit, ntested)
 
 ## Project Structure
 
 ```
 axeleres-assignment/
-├── cytotoxicity_analysis.ipynb          # Main analysis notebook
+├── cytotoxicity_analysis.ipynb          # Main analysis notebook (Tasks 1-4)
 ├── cytotox_invitrodb_v4_3_AUG2024.xlsx # Raw dataset
+├── requirements.txt                     # Python dependencies
 ├── README.md                            # This file
-└── Images/                              # Generated visualizations
+├── .gitignore                           # Git configuration
+└── Visualizations (6 PNG files):
     ├── distribution_analysis.png
     ├── correlation_matrix.png
+    ├── relationship_analysis.png
     ├── toxicity_categories.png
     ├── top_20_toxic_chemicals.png
     └── testing_coverage_analysis.png
@@ -61,36 +65,51 @@ Synthesized key findings and highlighted surprising observations about:
 ## Key Findings
 
 ### Chemical Toxicity Distribution
-- **~85-90%** of tested chemicals showed measurable cytotoxic effects
-- Most chemicals fall into the **"moderately toxic" range (10-100 µM)**
-- Toxicity values span **several orders of magnitude** (thousands-fold difference between most and least toxic)
+- **4,284 chemicals (40.9%)** showed measurable cytotoxic effects; **6,203 (59.1%)** showed no hits
+- Among toxic chemicals: **58.8% moderately toxic** (10-100 µM), **8.7% highly toxic** (<10 µM), **32.5% mildly toxic** (100-1000 µM)
+- Toxicity values span **10-million-fold range** (0.0001 µM to 1000 µM) - an enormous difference
+- Distribution is **right-skewed**: Median 39.39 µM, Mean 345.20 µM
 
-### Testing Insights
-- Chemicals tested more extensively (>100 assays) showed **more reliable toxicity estimates**
-- Hit consistency (nhit) and toxicity potency (µM concentration) are **distinct characteristics**
-- Average hit rate correlates with testing coverage, emphasizing need for comprehensive protocols
+### Testing Insights & Data Validation
+- **No testing bias detected**: Correlation between testing coverage and toxicity (r=0.033) is essentially zero
+- More hits correlate with higher potency: **r=-0.414** (moderate negative) - chemicals with consistent toxic effects across assays are more potent
+- This validates the screening approach is objective and unbiased
 
 ### Most Toxic Chemicals
-- Identified **top 20 most cytotoxic compounds** requiring very low concentrations (<10 µM) to induce effects
-- Many recognized industrial chemicals and pharmaceuticals, validating dataset reliability
-- Clear distinction between highly toxic and moderately toxic chemicals
+- **Most toxic**: Enalapril acid (0.0001 µM); **Least toxic**: Acetamide (1000 µM)
+- Top 20 most cytotoxic compounds require very low concentrations (<0.01 µM)
+- Many cluster at detection limit (0.0001 µM), suggesting actual toxicity may be even lower
 
 ## Visualizations
 
-### 1. Distribution by Toxicity Category
-![Toxicity Categories](distribution_analysis.png)
+### 1. Toxicity Categories (Main Visual)
+![Toxicity Categories](toxicity_categories.png)
 
-**Insight**: The majority of chemicals cluster in the moderate toxicity range, with relatively few showing extreme toxicity. This suggests most tested compounds require careful but not exceptional handling protocols.
+**Insight**: Distribution shows 58.8% of toxic chemicals (2,519) fall in the moderately toxic range (10-100 µM), 8.7% (374) are highly toxic (<10 µM), and 32.5% (1,391) are mildly toxic (100-1000 µM). This indicates most chemicals showing toxicity are moderately dangerous rather than extremely hazardous.
 
-### 2. Top 20 Most Toxic Chemicals
+### 2. Top 20 Most Toxic Chemicals (Main Visual)
 ![Top 20 Toxic](top_20_toxic_chemicals.png)
 
-**Insight**: The most toxic chemicals show tight clustering in their potency values, indicating a distinct group of highly hazardous compounds that warrant prioritized risk assessment.
+**Insight**: The top 20 most toxic chemicals range from 0.0001 to 0.0082 µM. Many cluster at the detection limit (0.0001 µM), including Enalapril acid, suggesting these chemicals may be even more toxic than measurable. These require priority regulatory attention.
 
-### 3. Testing Coverage and Reliability
+### 3. Testing Coverage and Reliability (Main Visual)
 ![Testing Coverage](testing_coverage_analysis.png)
 
-**Insight**: More extensively tested chemicals have tighter confidence bounds and more stable toxicity estimates, emphasizing the importance of comprehensive testing for accurate safety assessments.
+**Insight**: Box plot and scatter analysis show no systematic relationship between testing frequency and toxicity levels. Median toxicity remains consistent across different testing coverage levels, validating that the screening approach is unbiased and reliable.
+
+### Supporting Visualizations
+
+#### Distribution Analysis
+![Distribution Analysis](distribution_analysis.png)
+Four-panel overview showing: histogram (right-skewed), log-transformed histogram, box plot with outliers, and Q-Q plot confirming non-normal distribution.
+
+#### Correlation Matrix
+![Correlation Matrix](correlation_matrix.png)
+Heatmap showing relationships between variables. Key finding: ntested vs toxicity (r=0.033) shows no bias; nhit vs toxicity (r=-0.414) shows consistent hits correlate with higher potency.
+
+#### Relationship Analysis
+![Relationship Analysis](relationship_analysis.png)
+Three scatter plots exploring: ntested vs nhit (r=+0.225), nhit vs toxicity (r=-0.414), and ntested vs toxicity (r=+0.033).
 
 ## How to Run the Analysis
 
@@ -111,8 +130,9 @@ pip install pandas numpy matplotlib seaborn scipy openpyxl jupyter
 
 ### Expected Output
 - Statistical summaries printed to console
-- 5 visualization plots saved as PNG files
+- 6 visualization plots saved as PNG files
 - Complete analysis with interpretations in the notebook
+- All findings matching the README documented insights
 
 ## Dependencies
 
@@ -142,22 +162,29 @@ jupyter >= 1.0.0
 
 ## Key Takeaways for Discussion
 
-1. **Data Quality**: Dataset is comprehensive with minimal missing values and good coverage across compounds
+1. **Data Quality**: 100% completeness in key columns (chnm, cytotox_median_um, nhit, ntested). Zero duplicates. High-quality, reliable dataset for analysis.
 
-2. **Toxicity Patterns**: Clear distribution patterns emerge, with most chemicals showing moderate toxicity rather than extremes
+2. **Toxicity Patterns**: 40.9% of chemicals show measurable toxicity. Among these, 58.8% are moderately toxic (10-100 µM), not extremely dangerous. Toxicity spans 10-million-fold range (0.0001-1000 µM).
 
-3. **Testing Importance**: More extensive testing yields more reliable results, highlighting the value of thorough screening protocols
+3. **No Testing Bias**: Critical validation - testing coverage does NOT correlate with toxicity (r=0.033). More testing doesn't artificially inflate or deflate results. Data is objective.
 
-4. **Risk Assessment**: The identification of highly toxic chemicals provides actionable insights for prioritizing safety measures
+4. **Surprising Correlation**: Chemicals with consistent toxic effects (high nhit) are also more potent (r=-0.414). Broadly acting toxins are more dangerous - an important biological insight.
 
-5. **Statistical Approach**: Log-transformed values provide better distribution for statistical analysis, though raw µM values are more interpretable for non-experts
+5. **Risk Prioritization**: 374 highly toxic chemicals (<10 µM) identified, with many at detection limit (0.0001 µM). These require priority regulatory attention and may be even more toxic than measurable.
+
+6. **59% No Measurable Toxicity**: Over half of chemicals show no hits. This indicates either true safety or toxicity beyond 1000 µM testing range - important for understanding screening limitations.
 
 ## Questions for Follow-up Discussion
 
-- How should regulatory thresholds be set based on these distributions?
-- What factors explain the wide range of toxicity values?
-- How can we improve testing protocols based on coverage analysis?
-- What are the implications for chemical safety in industrial settings?
+- **59% No Hits**: Should we investigate whether these chemicals are truly safe or just toxic beyond 1000 µM? How can we prioritize follow-up testing?
+
+- **Detection Limit Clustering**: Many highly toxic chemicals cluster at 0.0001 µM. How should we assess actual toxicity when it exceeds measurement capability?
+
+- **Regulatory Priorities**: Given 374 highly toxic chemicals vs 2,519 moderately toxic, how should regulatory resources be allocated?
+
+- **Correlation Insight**: The finding that consistent toxicity (high nhit) correlates with potency (r=-0.414) - does this suggest broadly acting chemicals need different assessment criteria?
+
+- **Chemical Structure**: Can we incorporate molecular structure data to identify features predicting high toxicity?
 
 ## Author Notes
 
