@@ -48,7 +48,17 @@ env/
 *.tmp
 *.bak
 *_executed.ipynb
+~$*.xlsx
 
-# Data files (uncomment if you don't want to commit large datasets)
-# *.xlsx
-# *.csv
+# Data files (large datasets)
+*.xlsx
+*.csv
+
+# Study materials (keep local only)
+*STUDY_GUIDE.md
+*_GUIDE.md
+*_CONCEPTS.md
+REQUIREMENTS_MAPPING.md
+
+# Assignment documents
+*.docx

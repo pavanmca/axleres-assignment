@@ -25,7 +25,7 @@ axeleres-assignment/
 ├── requirements.txt                     # Python dependencies
 ├── README.md                            # This file
 ├── .gitignore                           # Git configuration
-└── Visualizations (6 PNG files):
+└── images/                              # Generated visualizations
     ├── distribution_analysis.png
     ├── correlation_matrix.png
     ├── relationship_analysis.png
@@ -83,32 +83,35 @@ Synthesized key findings and highlighted surprising observations about:
 ## Visualizations
 
 ### 1. Toxicity Categories (Main Visual)
-![Toxicity Categories](toxicity_categories.png)
+![Toxicity Categories](images/toxicity_categories.png)
 
 **Insight**: Distribution shows 58.8% of toxic chemicals (2,519) fall in the moderately toxic range (10-100 µM), 8.7% (374) are highly toxic (<10 µM), and 32.5% (1,391) are mildly toxic (100-1000 µM). This indicates most chemicals showing toxicity are moderately dangerous rather than extremely hazardous.
 
 ### 2. Top 20 Most Toxic Chemicals (Main Visual)
-![Top 20 Toxic](top_20_toxic_chemicals.png)
+![Top 20 Toxic](images/top_20_toxic_chemicals.png)
 
 **Insight**: The top 20 most toxic chemicals range from 0.0001 to 0.0082 µM. Many cluster at the detection limit (0.0001 µM), including Enalapril acid, suggesting these chemicals may be even more toxic than measurable. These require priority regulatory attention.
 
 ### 3. Testing Coverage and Reliability (Main Visual)
-![Testing Coverage](testing_coverage_analysis.png)
+![Testing Coverage](images/testing_coverage_analysis.png)
 
 **Insight**: Box plot and scatter analysis show no systematic relationship between testing frequency and toxicity levels. Median toxicity remains consistent across different testing coverage levels, validating that the screening approach is unbiased and reliable.
 
 ### Supporting Visualizations
 
 #### Distribution Analysis
-![Distribution Analysis](distribution_analysis.png)
+![Distribution Analysis](images/distribution_analysis.png)
+
 Four-panel overview showing: histogram (right-skewed), log-transformed histogram, box plot with outliers, and Q-Q plot confirming non-normal distribution.
 
 #### Correlation Matrix
-![Correlation Matrix](correlation_matrix.png)
+![Correlation Matrix](images/correlation_matrix.png)
+
 Heatmap showing relationships between variables. Key finding: ntested vs toxicity (r=0.033) shows no bias; nhit vs toxicity (r=-0.414) shows consistent hits correlate with higher potency.
 
 #### Relationship Analysis
-![Relationship Analysis](relationship_analysis.png)
+![Relationship Analysis](images/relationship_analysis.png)
+
 Three scatter plots exploring: ntested vs nhit (r=+0.225), nhit vs toxicity (r=-0.414), and ntested vs toxicity (r=+0.033).
 
 ## How to Run the Analysis
